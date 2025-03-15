@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id      Int      @id @default(autoincrement())
+  email   String   @unique
+  name    String?
+  posts   Post[]
+}
+
+model Post {
+  id        Int     @id @default(autoincrement())
+  title     String
+  content   String?
+  published Boolean @default(false)
+  author    User?   @relation(fields: [authorId], references: [id])
+  authorId  Int?
+}
+model ChatbotMetric {
+  id           String   @id @default(uuid())
+  interactions Int
+  queryVolume  Int
+  createdAt    DateTime @default(now())
+}
+model ResponseTime {
+  id        String   @id @default(uuid())
+  time      Float
+  createdAt DateTime @default(now())
+}
+model UsagePattern {
+  id        String   @id @default(uuid())
+  peakTime  String
+  dailyPeak String
+  createdAt DateTime @default(now())
+}
+model Query {
+  id        String   @id @default(uuid())
+  total     Int
+  createdAt DateTime @default(now())
+}
